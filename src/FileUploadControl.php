@@ -259,7 +259,7 @@ class FileUploadControl extends \Nette\Forms\Controls\UploadControl {
 	/**
 	 * @param Form $form
 	 */
-	protected function attached($form) {
+	protected function attached($form): void {
 		parent::attached($form);
 		$this->form->addComponent($this->controller, "uploadController" . ucfirst($this->name));
 	}
@@ -550,7 +550,7 @@ class FileUploadControl extends \Nette\Forms\Controls\UploadControl {
 	/**
 	 * Získání identifikačního tokenu.
 	 */
-	public function loadHttpData() {
+	public function loadHttpData(): void {
 		parent::loadHttpData();
 		
 		/** @var \Nette\Http\Request $request */
