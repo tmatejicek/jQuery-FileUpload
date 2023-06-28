@@ -9,7 +9,7 @@ use Nette\DI\Container;
 use Nette\Forms\Controls\UploadControl;
 use Nette\Http\Request;
 use Nette\InvalidStateException;
-use Nette\Localization\Translator;
+use Nette\Localization\ITranslator;
 use Nette\Utils\Html;
 use stdClass;
 use Zet\FileUpload\Exception\InvalidValueException;
@@ -187,7 +187,7 @@ class FileUploadControl extends UploadControl
 			$component->setRenderer($configuration['renderer']);
 
 			if ($configuration['translator'] === null) {
-				$translator = $systemContainer->getByType(Translator::class, false);
+				$translator = $systemContainer->getByType(ITranslator::class, false);
 				$component->setTranslator($translator);
 			} else {
 				$component->setTranslator($configuration['translator']);
