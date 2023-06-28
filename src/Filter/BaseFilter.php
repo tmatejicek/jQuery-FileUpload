@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace Zet\FileUpload\Filter;
 
@@ -17,14 +17,6 @@ abstract class BaseFilter implements IMimeTypeFilter
 	use SmartObject;
 
 	/**
-	 * Vrátí seznam povolených typů souborů s jejich typickou koncovkou.
-	 *
-	 * @example array("text/plain" => "txt")
-	 * @return string[]
-	 */
-	abstract protected function getMimeTypes(): array;
-
-	/**
 	 * Ověří mimetype předaného souboru.
 	 *
 	 * @param FileUpload $file Nahraný soubor k ověření.
@@ -32,21 +24,21 @@ abstract class BaseFilter implements IMimeTypeFilter
 	 */
 	public function checkType(FileUpload $file): bool
 	{
-		if (Arrays::getKeyOffset($this->getMimeTypes(), (string) $file->getContentType()) !== null) {
+		if (in_array((string)$file->getContentType(), array_keys($this->getMimeTypes()), true)) {
 			return true;
 		} else {
 			// Pokud se nepodaří ověřit mimetype, ověříme alespoň koncovku.
-			return array_search($this->getExtension($file->getUntrustedName()), array_unique($this->getMimeTypes()), true) !== false;
+			return in_array($this->getExtension($file->getUntrustedName()), array_unique($this->getMimeTypes()), true);
 		}
 	}
 
 	/**
-	 * Vrátí seznam povolených typů souborů.
+	 * Vrátí seznam povolených typů souborů s jejich typickou koncovkou.
+	 *
+	 * @return string[]
+	 * @example array("text/plain" => "txt")
 	 */
-	public function getAllowedTypes(): string
-	{
-		return implode(', ', array_unique($this->getMimeTypes()));
-	}
+	abstract protected function getMimeTypes(): array;
 
 	/**
 	 * Vrátí koncovku souboru.
@@ -56,6 +48,14 @@ abstract class BaseFilter implements IMimeTypeFilter
 		$exploded = explode('.', $filename);
 
 		return $exploded[count($exploded) - 1];
+	}
+
+	/**
+	 * Vrátí seznam povolených typů souborů.
+	 */
+	public function getAllowedTypes(): string
+	{
+		return implode(', ', array_unique($this->getMimeTypes()));
 	}
 
 }
